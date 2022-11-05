@@ -1,71 +1,108 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
-    public class YearlyReport {
-        public static HashMap<Integer, ArrayList<DataYearly>> dataMap = new HashMap<>();
-        public static ArrayList<DataYearly> incomeList = new ArrayList<>(); //
-        public static ArrayList<DataYearly> expendList = new ArrayList<>();
-        public static ArrayList<DataYearly> dataList = new ArrayList<>();
-        static String path = "resources/y.2021.csv";
+// Годовой отчет
+public class YearlyReport {
 
-        public static void addMapYearly() {
-            String content = readFileContents.readFileContentsOrNull(path);
-            String[] lines = content.split("\r?\n");
-            for (int i = 1; i < lines.length; i++) {
-                String[] parts = lines[i].split(",");
-                Integer month = Integer.parseInt(parts[0]);
-                Integer amount = Integer.parseInt(parts[1]);
-                Boolean isExpense = Boolean.parseBoolean(parts[2]);
-                DataYearly dataYearly = new DataYearly(month, amount, isExpense);
-                dataList.add(dataYearly);
-                dataMap.put(i, dataList);
+    // записи по месяцам
+    private DataYearly[] data = new DataYearly[12];
+    // количество загруженных месяцев
+    private int count = 0;
+    // готовность отчета
+    private boolean ready = false;
+    // год
+    private int year;
+    // суммарный доход и расход
+    private int totalIncome = 0, totalOutcome = 0;
 
-                if(isExpense){
-                    expendList.add(dataYearly);
-                }else{
-                    incomeList.add(dataYearly); //
-                }
-            }
-            System.out.println("Списсок за год считан!");
-            System.out.println(" ");
-        }
-
-        static void expensesMid(){
-            int expense = 0;
-            int mid = 0;
-            for(DataYearly expens : expendList){
-                expense += expens.amount;
-            }
-            mid = expense/expendList.size();
-            System.out.println("Средний расход: "+mid);
-        }
-
-        static void incomeMid(){
-            int incomes = 0;
-            int mid = 0;
-            for(DataYearly income : incomeList){
-                incomes += income.amount;
-            }
-            mid = incomes/incomeList.size();
-            System.out.println("Средний доход: "+mid);
-        }
-
-        static void printYearlyReport(){
-            int income = 0;
-            int expense = 0;
-            int profit = 0;
-
-            for(DataYearly incomes: incomeList){
-                income = incomes.amount;
-                for (DataYearly expenses: expendList){
-                    expense = expenses.amount;
-                    if(incomes.month.equals(expenses.month)){
-                        profit=income-expense;
-                    }
-                }
-                System.out.println(incomes + " месяц - "+ profit);
-            }
-            expensesMid();
-            incomeMid();
-        }
+    public YearlyReport(int year) {
+        this.year = year;
     }
+
+    // get / set
+
+    public DataYearly[] getData() {
+        return data;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public boolean isReady() {
+        return ready;
+    }
+
+    // загрузка отчета
+    public void addMapYearly() {
+        List<String> lines = Tools.readFileContentsOrNull("resources/y." + year + ".csv");
+        Arrays.fill(data, null);
+        boolean skipHeader = false;
+
+        for (String line : lines) {
+            if (!skipHeader) {
+                skipHeader = true;
+                continue;
+            }
+
+            String[] parts = line.split(",");
+            int month = Integer.parseInt(parts[0]);
+            int amount = Integer.parseInt(parts[1]);
+            boolean isExpense = Boolean.parseBoolean(parts[2]);
+
+            DataYearly record = data[month - 1];
+            if (record == null) {
+                record = new DataYearly();
+                data[month - 1] = record;
+                count++;
+            }
+            if (isExpense) {
+                record.setAmountOutcome(amount);
+            } else {
+                record.setAmountIncome(amount);
+            }
+        }
+        for(DataYearly rec: data){
+            if(rec==null) continue;
+            totalIncome+=rec.getAmountIncome();
+            totalOutcome+=rec.getAmountOutcome();
+        }
+        ready = true;
+        System.out.println("Список за год считан! Считано записей: " + count);
+    }
+
+    // вывод на печать
+    public void print() {
+        if(!isReady()){
+            System.out.println("Сначала загрузите отчеты");
+            return;
+        }
+        if(count==0){
+            System.out.println("Отчет не содержит данных ни за один месяц");
+            return;
+        }
+        System.out.println("год "+year);
+        System.out.println("прибыль по месяцам:");
+        for(int i=0; i<12; i++){
+            DataYearly rec = data[i];
+            if(rec==null) continue;
+            System.out.printf("%-10s % 12d\n",Tools.monthName(i),rec.getTotal());
+        }
+        System.out.println();
+        System.out.printf("средний расход: % 12.2f\n",((double)totalOutcome/count));
+        System.out.printf("средний доход : % 12.2f\n",((double)totalIncome/count));
+
+    }
+
+    @Override
+    public String toString() {
+        return "YearlyReport{" +
+                "data=" + Arrays.toString(data) +
+                ", count=" + count +
+                ", ready=" + ready +
+                ", year=" + year +
+                '}';
+    }
+}

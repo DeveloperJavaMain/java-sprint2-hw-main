@@ -1,11 +1,42 @@
+//Информация по месяцу из годового отчета
 public class DataYearly {
-    Integer month;
-    Integer amount;
-    Boolean is_Expense;
+    int amountIncome, amountOutcome; // доход / расход
+    int total;  // суммарная прибыль
 
-    public DataYearly(Integer month, Integer amount, Boolean is_Expense){
-        this.month = month;
-        this.amount = amount;
-        this.is_Expense = is_Expense;
+    // get / set
+
+    public int getAmountIncome() {
+        return amountIncome;
+    }
+
+    public void setAmountIncome(int amountIncome) {
+        this.amountIncome = amountIncome;
+        total = this.amountIncome-this.amountOutcome;
+    }
+
+    public int getAmountOutcome() {
+        return amountOutcome;
+    }
+
+    public void setAmountOutcome(int amountOutcome) {
+        this.amountOutcome = amountOutcome;
+        total = this.amountIncome-this.amountOutcome;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
+    @Override
+    public String toString() {
+        return "DataYearly{" +
+                "amountIncome=" + amountIncome +
+                ", amountOutcome=" + amountOutcome +
+                ", total=" + total +
+                '}';
     }
 }
