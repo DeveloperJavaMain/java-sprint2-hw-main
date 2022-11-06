@@ -3,9 +3,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-/*
-    Вспомогательные методы
- */
+//Вспомогательные методы
 public class Tools {
     private static String[] names = {"Январь","Февраль","Март","Апрель","Май","Июнь",
             "Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"};

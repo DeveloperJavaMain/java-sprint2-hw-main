@@ -1,9 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-/*
-    Отчет за месяц
- */
+//Отчет за месяц
 public class MonthlyReport {
 
     // список операций
@@ -41,6 +39,11 @@ public class MonthlyReport {
 
     public void addMapMonth(String source){
         List<String> lines = Tools.readFileContentsOrNull(source);
+
+        if(lines==null){
+            System.out.println("File not loaded: "+source);
+            return;
+        }
 
         boolean skipHeader = false;
 

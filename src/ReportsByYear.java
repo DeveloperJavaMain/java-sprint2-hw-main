@@ -1,9 +1,7 @@
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-/*
-    Набор месячных отчетов за год
- */
+//Набор месячных отчетов за год
 public class ReportsByYear {
     private MonthlyReport[] reports = new MonthlyReport[12];
     private int totalIncome = 0 , totalOutcome = 0;

@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+// Считывание файлов
 public class readFileContents {
 
     public static String readFileContentsOrNull(String path)

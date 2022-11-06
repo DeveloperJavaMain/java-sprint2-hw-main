@@ -1,5 +1,4 @@
 //Сверка отчетов
-
 public class Checkup {
     public static boolean checkup(YearlyReport yearly, ReportsByYear monthly){
 
@@ -43,4 +42,5 @@ public class Checkup {
         return result;
     }
 }
+
 

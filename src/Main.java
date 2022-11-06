@@ -1,9 +1,6 @@
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-/*
-    Стартовый класс
- */
 public class Main {
     public static Scanner scanner = new Scanner(System.in);
     public static void main(String[] args) {
@@ -25,17 +22,13 @@ public class Main {
                 continue;
             }
 
-            if (command == 0) {
-                System.out.println("До свидания - ждем вас снова!");
-                break;
-            }
-
             switch (command){
                 case 1: reportsByYear.loadReports(); break;
                 case 2: yearlyReport.addMapYearly(); break;
                 case 3: Checkup.checkup(yearlyReport, reportsByYear); break;
                 case 4: reportsByYear.print(); break;
                 case 5: yearlyReport.print(); break;
+                case 0: System.out.println("До свидания - ждем вас снова!"); break;
                 default: {
                     System.out.println("Введенные данные не корректны!");
                     System.out.println("-Выберите корректный пункт меню-");

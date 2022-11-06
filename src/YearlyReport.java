@@ -3,7 +3,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-// Годовой отчет
+//Годовой отчет
+
 public class YearlyReport {
 
     // записи по месяцам
@@ -37,8 +38,15 @@ public class YearlyReport {
 
     // загрузка отчета
     public void addMapYearly() {
-        List<String> lines = Tools.readFileContentsOrNull("resources/y." + year + ".csv");
+        String fname = "resources/y." + year + ".csv";
+        List<String> lines = Tools.readFileContentsOrNull(fname);
         Arrays.fill(data, null);
+
+        if(lines==null){
+            System.out.println("File not loaded: "+fname);
+            return;
+        }
+
         boolean skipHeader = false;
 
         for (String line : lines) {
